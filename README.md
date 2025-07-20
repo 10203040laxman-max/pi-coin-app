@@ -1,20 +1,28 @@
+# Pi Coin Exchange (Buy/Sell App)
 
-# Pi Coin Buy/Sell App
+A simple web application to buy and sell Pi Coin with basic user authentication, wallet integration, and transaction records.
 
-## How to Run Locally
-1. Install dependencies:
+---
+
+## Features
+- User Registration & Login (JWT authentication).
+- Display owner’s Pi mainnet wallet address.
+- Users can submit Pi payments with TxID.
+- Admin (you) can verify transactions (future feature).
+- Responsive design for mobile use.
+
+---
+
+## Tech Stack
+- **Backend:** Node.js + Express
+- **Database:** SQLite (simple & file-based)
+- **Frontend:** HTML, CSS, Vanilla JavaScript
+- **Hosting:** Render / Vercel (free)
+
+---
+
+## Setup Instructions
+1. **Clone this repo:**
    ```bash
-   npm install
-   ```
-2. Start the app:
-   ```bash
-   npm start
-   ```
-3. Open `http://localhost:3000` in your browser.
-
-## Deploy to Render
-1. Upload this project to GitHub.
-2. On Render, create a new Web Service from your GitHub repo.
-3. Set the build command: `npm install`.
-4. Set the start command: `npm start`.
-5. Deploy!
+   git clone https://github.com/YOUR_USERNAME/pi-coin-exchange.git
+   cd pi-coin-exchange
