@@ -84,15 +84,6 @@
       });
     }
 
-    function buy() {
-      const amount = document.getElementById('amount').value;
-      fetch('/buy', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
-        body: JSON.stringify({ amount })
-      }).then(res => res.json()).then(() => loadTransactions());
-    }
-
     function sell() {
       const amount = document.getElementById('amount').value;
       fetch('/sell', {
@@ -101,6 +92,21 @@
         body: JSON.stringify({ amount })
       }).then(res => res.json()).then(() => loadTransactions());
     }
+
+    <div id="wallet-section" class="card hidden">
+  <h2>Send Pi to My Wallet</h2>
+  <p>Wallet Address:</p>
+  <textarea id="wallet-address" readonly></textarea>
+  <button onclick="copyWallet()">Copy Wallet Address</button>
+
+  <h3 class="mt-2">I Sent Pi</h3>
+  <input id="deposit-txid" placeholder="Transaction ID" />
+  <input id="deposit-amount" type="number" placeholder="Amount (Pi)" />
+  <button onclick="submitDeposit()">Submit Payment Proof</button>
+
+  <h3 class="mt-2">My Pi Payments</h3>
+  <ul id="deposit-list"></ul>
+</div>
 
     function loadTransactions() {
       fetch('/transactions', {
