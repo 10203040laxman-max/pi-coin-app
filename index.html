@@ -1,138 +1,28 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pi Coin Buy/Sell</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Pi Coin Exchange</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-  <div class="bg-white p-6 rounded-xl shadow-md w-full max-w-md">
-    <h1 class="text-2xl font-bold mb-4 text-center">Pi Coin Buy/Sell</h1>
-
+<body>
+  <div class="container">
+    <h1>Pi Coin Exchange</h1>
+    
     <div id="auth-section">
-      <h2 class="text-lg font-semibold mb-2">Login</h2>
-      <input id="login-username" placeholder="Username" class="border p-2 w-full mb-2">
-      <input id="login-password" type="password" placeholder="Password" class="border p-2 w-full mb-2">
-      <button onclick="login()" class="bg-blue-500 text-white px-4 py-2 rounded">Login</button>
-      <p class="mt-2 text-sm">No account? <a href="#" onclick="showRegister()" class="text-blue-500">Register</a></p>
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
+      <button onclick="register()">Register</button>
+      <button onclick="login()">Login</button>
     </div>
 
-    <div id="register-section" class="hidden">
-      <h2 class="text-lg font-semibold mb-2">Register</h2>
-      <input id="register-username" placeholder="Username" class="border p-2 w-full mb-2">
-      <input id="register-password" type="password" placeholder="Password" class="border p-2 w-full mb-2">
-      <button onclick="register()" class="bg-green-500 text-white px-4 py-2 rounded">Register</button>
-      <p class="mt-2 text-sm">Have an account? <a href="#" onclick="showLogin()" class="text-blue-500">Login</a></p>
-    </div>
-
-    <div id="app-section" class="hidden">
-      <h2 class="text-lg font-semibold mb-2">Welcome!</h2>
-      <input id="amount" type="number" placeholder="Amount" class="border p-2 w-full mb-2">
-      <button onclick="buy()" class="bg-green-500 text-white px-4 py-2 rounded mr-2">Buy</button>
-      <button onclick="sell()" class="bg-red-500 text-white px-4 py-2 rounded">Sell</button>
-      <button onclick="logout()" class="bg-gray-500 text-white px-4 py-2 rounded ml-2">Logout</button>
-      <h3 class="mt-4 font-semibold">Transactions:</h3>
-      <ul id="transactions" class="mt-2 text-sm"></ul>
+    <div id="wallet-section" class="hidden">
+      <h2>Send Pi to Wallet</h2>
+      <textarea id="wallet-address" readonly></textarea>
+      <button onclick="copyWallet()">Copy Wallet</button>
     </div>
   </div>
-
-  <script>
-    const API = '';
-
-    function showRegister() {
-      document.getElementById('auth-section').classList.add('hidden');
-      document.getElementById('register-section').classList.remove('hidden');
-    }
-
-    function showLogin() {
-      document.getElementById('register-section').classList.add('hidden');
-      document.getElementById('auth-section').classList.remove('hidden');
-    }
-
-    function saveToken(token) { localStorage.setItem('token', token); }
-    function getToken() { return localStorage.getItem('token'); }
-
-    function login() {
-      const username = document.getElementById('login-username').value;
-      const password = document.getElementById('login-password').value;
-      fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      }).then(res => res.json()).then(data => {
-        if (data.token) {
-          saveToken(data.token);
-          showApp();
-        } else alert(data.error || 'Login failed');
-      });
-    }
-
-    function register() {
-      const username = document.getElementById('register-username').value;
-      const password = document.getElementById('register-password').value;
-      fetch('/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      }).then(res => res.json()).then(data => {
-        if (data.success) {
-          alert('Registered successfully. Please login.');
-          showLogin();
-        } else alert(data.error || 'Registration failed');
-      });
-    }
-
-    function sell() {
-      const amount = document.getElementById('amount').value;
-      fetch('/sell', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
-        body: JSON.stringify({ amount })
-      }).then(res => res.json()).then(() => loadTransactions());
-    }
-
-    <div id="wallet-section" class="card hidden">
-  <h2>Send Pi to My Wallet</h2>
-  <p>Wallet Address:</p>
-  <textarea id="wallet-address" readonly></textarea>
-  <button onclick="copyWallet()">Copy Wallet Address</button>
-
-  <h3 class="mt-2">I Sent Pi</h3>
-  <input id="deposit-txid" placeholder="Transaction ID" />
-  <input id="deposit-amount" type="number" placeholder="Amount (Pi)" />
-  <button onclick="submitDeposit()">Submit Payment Proof</button>
-
-  <h3 class="mt-2">My Pi Payments</h3>
-  <ul id="deposit-list"></ul>
-</div>
-
-    function loadTransactions() {
-      fetch('/transactions', {
-        headers: { 'Authorization': 'Bearer ' + getToken() }
-      }).then(res => res.json()).then(data => {
-        const list = document.getElementById('transactions');
-        list.innerHTML = '';
-        data.forEach(tx => {
-          list.innerHTML += `<li>${tx.type.toUpperCase()} - ${tx.amount} Pi at ${tx.timestamp}</li>`;
-        });
-      });
-    }
-
-    function showApp() {
-      document.getElementById('auth-section').classList.add('hidden');
-      document.getElementById('register-section').classList.add('hidden');
-      document.getElementById('app-section').classList.remove('hidden');
-      loadTransactions();
-    }
-
-    function logout() {
-      localStorage.removeItem('token');
-      showLogin();
-    }
-
-    if (getToken()) showApp();
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
